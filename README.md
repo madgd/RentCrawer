@@ -17,7 +17,7 @@ Currently no other language documents are available, Chinese documents only.
 > * 可以配置帖子开始时间
 
 抓取结果示意图：
-![Rent Crawelr Result](https://github.com/waylife/RentCrawer/blob/master/Images/result_2.0.png?raw=true)
+![Rent Crawelr Result](https://github.com/madgd/RentCrawer/blob/master/Images/result_2.0.png?raw=true)
 
 ##使用说明
 升级支持Python3  
