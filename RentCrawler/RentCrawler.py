@@ -1,5 +1,6 @@
 # coding=utf-8
-__author__ = 'rxread'
+__ori__ = 'rxread'
+__update__ = 'madgd'
 
 import sqlite3
 import re
@@ -17,11 +18,12 @@ import Config
 class RentCrawlerUtils(object):
     @staticmethod
     def isInBalckList(blacklist, toSearch):
-        if blacklist:
-            return False
+        # if blacklist:
+        #     return False
         for item in blacklist:
             #decode('unicode-escape')
             if toSearch.find(item) != -1:
+                print("find black word %s in %s" % (item, toSearch))
                 return True
         return False
 
@@ -41,8 +43,8 @@ class RentCrawlerUtils(object):
 
 
 class RentMain(object):
-    smth_black_list = (u'黑名单', u'Re', u'警告', u'发布', u'关于', u'通知', u'审核', u'求助', u'规定', u'求租')
-    douban_black_list=(u'搬家')
+    smth_black_list = ('黑名单', 'Re', '警告', '发布', '关于', '通知', '审核', '求助', '规定', '求租')
+    douban_black_list=('搬家')
 
     newsmth_headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.65 Safari/537.36',
@@ -63,12 +65,12 @@ class RentMain(object):
             'Connection': 'keep-alive',
             'DNT': '1',
             'HOST': 'www.douban.com',
-            'Cookie': self.config.douban_cookie
+            # 'Cookie': self.config.douban_cookie
         }
 
     def run(self):
         try:
-            print "Crawler is running now."
+            print("Crawler is running now.")
             # creat database
             conn = sqlite3.connect(self.config.db_file)
             conn.text_factory = str
@@ -77,7 +79,7 @@ class RentMain(object):
                 'CREATE TABLE IF NOT EXISTS rent(id INTEGER PRIMARY KEY, title TEXT, url TEXT UNIQUE,itemtime timestamp, crawtime timestamp ,author TEXT, source TEXT,keyword TEXT,note TEXT)')
             cursor.close()
             start_time = RentCrawlerUtils.getTimeFromStr(self.config.start_time)
-            print "searching data after date ", start_time
+            print("searching data after date ", start_time)
 
             cursor = conn.cursor()
 
@@ -90,11 +92,10 @@ class RentMain(object):
                 newsmth_regex = r'<table class="board-list tiz"(?:\s|\S)*</td></tr></table>'
                 #must do like this
                 for keyword in search_list:
-                    print '>>>>>>>>>>Search newsmth %s ...' % keyword
+                    print('>>>>>>>>>>Search newsmth %s ...' % keyword)
                     url = 'http://www.newsmth.net/nForum/s/article?ajax&au&b=HouseRent&t1=' + keyword
                     r = requests.get(url, headers=self.newsmth_headers)
                     if r.status_code == 200:
-                        # print r.text
                         match = re.search(newsmth_regex, r.text)
                         if match:
                             try:
@@ -123,23 +124,23 @@ class RentMain(object):
                                             [title_text, link_text, RentCrawlerUtils.getTimeFromStr(time_text),
                                              datetime.datetime.now(), author_text, keyword,
                                              'newsmth', ''])
-                                        print 'add new data:', title_text, time_text, author_text, link_text, keyword
+                                        print('add new data:', title_text, time_text, author_text, link_text, keyword)
                                         #/nForum/article/HouseRent/225839 /nForum/#!article/HouseRent/225839
-                                    except sqlite3.Error, e:
-                                        print 'data exists:', title_text, link_text, e
-                            except Exception, e:
-                                print "error match table", e
+                                    except sqlite3.Error as e:
+                                        print('data exists:', title_text, link_text, e)
+                            except Exception as e:
+                                print("error match table", e)
                         else:
-                            print "no data"
+                            print("no data")
                     else:
-                        print 'request url error %s -status code: %s:' % (url, r.status_code)
+                        print('request url error %s -status code: %s:' % (url, r.status_code))
             else:
-                print 'newsmth not enabled'
+                print('newsmth not enabled')
             # end newsmth
 
             #Douban: Beijing Rent,Beijing Rent Douban
             if self.config.douban_enable:
-                print 'douban'
+                print('douban')
                 douban_url = ['http://www.douban.com/group/search?group=35417&cat=1013&sort=time&q=',
                               'http://www.douban.com/group/search?group=26926&cat=1013&sort=time&q=',
                               'http://www.douban.com/group/search?group=262626&cat=1013&sort=time&q=',
@@ -151,23 +152,23 @@ class RentMain(object):
                               'http://www.douban.com/group/search?group=252091&cat=1013&sort=time&q=',
                               'http://www.douban.com/group/search?group=10479&cat=1013&sort=time&q=',
                               'http://www.douban.com/group/search?group=221207&cat=1013&sort=time&q=']
-                douban_url_name = (u'Douban-北京租房', u'Douban-北京租房豆瓣', u'Douban-北京无中介租房',
-                                   u'Douban-北京租房专家', u'Douban-北京租房（非中介）', u'Douban-北京租房房东联盟(中介勿扰) ',
-                                   u'Douban-北京租房（密探）', u'Douban-北漂爱合租（租房）', u'Douban-豆瓣♥北京♥租房',
-                                   u'Douban-吃喝玩乐在北京', u'Douban-北京CBD租房')
+                douban_url_name = ('Douban-北京租房', 'Douban-北京租房豆瓣', 'Douban-北京无中介租房',
+                                   'Douban-北京租房专家', 'Douban-北京租房（非中介）', 'Douban-北京租房房东联盟(中介勿扰) ',
+                                   'Douban-北京租房（密探）', 'Douban-北漂爱合租（租房）', 'Douban-豆瓣♥北京♥租房',
+                                   'Douban-吃喝玩乐在北京', 'Douban-北京CBD租房')
 
                 for i in range(len(list(douban_url))):
-                    print 'start i->',i
+                    print('start i->',i)
                     for j in range(len(search_list)):
                         keyword = search_list[j]
-                        print 'start i->j %s->%s %s' %(i,j,keyword)
-                        print '>>>>>>>>>>Search %s  %s ...' % (douban_url_name[i].encode('utf-8'), keyword)
+                        print('start i->j %s->%s %s' %(i,j,keyword))
+                        print('>>>>>>>>>>Search %s  %s ...' % (douban_url_name[i], keyword))
                         url_link = douban_url[i] + keyword
                         r = requests.get(url_link, headers=self.douban_headers)
                         if r.status_code == 200:
                             try:
-                                if i==0:
-                                    self.douban_headers['Cookie']=r.cookies
+                                # if i==0:
+                                #     self.douban_headers['Cookie']=r.cookies
                                 soup = BeautifulSoup(r.text)
                                 table = soup.find_all(attrs={'class': 'olt'})[0]
                                 for tr in table.find_all('tr'):
@@ -194,17 +195,17 @@ class RentMain(object):
                                             [title_text, link_text, RentCrawlerUtils.getTimeFromStr(time_text),
                                              datetime.datetime.now(), '', keyword,
                                              douban_url_name[i], reply_count])
-                                        print 'add new data:', title_text, time_text, reply_count, link_text, keyword
-                                    except sqlite3.Error, e:
-                                        print 'data exists:', title_text, link_text, e
-                            except Exception, e:
-                                print "error match table", e
+                                        print('add new data:', title_text, time_text, reply_count, link_text, keyword)
+                                    except sqlite3.Error as e:
+                                        print('data exists:', title_text, link_text, e)
+                            except Exception as e:
+                                print("error match table", e)
                         else:
-                            print 'request url error %s -status code: %s:' % (url_link, r.status_code)
+                            print('request url error %s -status code: %s:' % (url_link, r.status_code))
                         time.sleep(self.config.douban_sleep_time)
-                        #print 'end i->',i
+                        #print('end i->',i
             else:
-                print 'douban not enabled'
+                print('douban not enabled')
             #end douban
 
             cursor.close()
@@ -237,18 +238,19 @@ class RentMain(object):
                 file.writelines('</table>')
                 file.writelines('</body></html>')
             cursor.close()
-        except Exception, e:
-            print "Error:", e.message
+        except Exception as e:
+            print("Error:")
+            print(e)
         finally:
             conn.commit()
             conn.close()
-            print "Search Finish,Please open result.html to view result"
+            print("Search Finish,Please open result.html to view result")
             # open result page
             #webbrowser.open("result.html")
 
 
 '''
-May 25 ,2015
+2021-01-04
 Beijing, China
 '''
 
@@ -266,10 +268,10 @@ class RentCrawler(object):
 # Main entry
 if __name__ == '__main__':
     # set encoding
-    reload(sys)
-    sys.setdefaultencoding('utf8')
-    prog_info = "Rent Crawler 1.2\nBy RxRead\nhttp://blog.zanlabs.com\n"
-    print prog_info
+    import importlib
+    importlib.reload(sys)
+    prog_info = "Rent Crawler 2.0(in py3)\nBy Madgd(original from RxRead)\n"
+    print(prog_info)
 
     rentcrawler = RentCrawler()
     rentcrawler.run()

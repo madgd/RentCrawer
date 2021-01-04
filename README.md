@@ -1,4 +1,7 @@
 # Rent Crawler 租房爬虫
+
+>主体沿用原版readme
+
 This is a house rental information crawler project for people living in Beijing.
 Currently no other language documents are available, Chinese documents only.
 
@@ -17,9 +20,10 @@ Currently no other language documents are available, Chinese documents only.
 ![Rent Crawelr Result](https://github.com/waylife/RentCrawer/blob/master/Images/result_1.2.png?raw=true)
 
 ##使用说明
-Python 2.7+,暂时不支持Python 3    
+升级支持Python3  
+~~Python 2.7+,暂时不支持Python 3~~    
 需要先安装pip依赖管理工具  
-需要先安装Requests以及BeautifulSoup库，如果已经安装可以忽略，没有安装，使用以下命令安装：
+需要先安装Requests以及BeautifulSoup库，如果已经安装可以忽略，没有安装的缺啥装啥：
 
 ``` bash
 pip install requests
@@ -40,8 +44,9 @@ pip install beautifulsoup4
 豆瓣数据请求目前为每获得一次结果暂停1s
 
 ##反馈与建议
-可通过以下地址提交
-https://github.com/waylife/RentCrawer/issues/new
+可通过以下地址提交    
+https://github.com/madgd/RentCrawer/issues/new    
+~~https://github.com/waylife/RentCrawer/issues/new~~原版老哥貌似已经不再更新
 
 ##改进
 欢迎各路大神提供改进意见

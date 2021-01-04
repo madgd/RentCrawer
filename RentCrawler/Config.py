@@ -1,12 +1,13 @@
 # coding=utf-8
-import ConfigParser
+import configparser
 
-__author__ = 'rxread'
+__ori__ = 'rxread'
+__update__ = 'madgd'
 
 
 class Config(object):
     def __init__(self, config_file_name):
-        self.cf = ConfigParser.ConfigParser()
+        self.cf = configparser.ConfigParser()
         self.cf.read(config_file_name)
 
         key_list = self.cf.get('common', 'key_search_word_list').split(',')
