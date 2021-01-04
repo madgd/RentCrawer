@@ -46,7 +46,7 @@ pip install beautifulsoup4
 ##反馈与建议
 可通过以下地址提交    
 https://github.com/madgd/RentCrawer/issues/new    
-~~https://github.com/waylife/RentCrawer/issues/new~~
+~~https://github.com/waylife/RentCrawer/issues/new~~    
 原版老哥貌似已经不再更新
 
 ##改进
